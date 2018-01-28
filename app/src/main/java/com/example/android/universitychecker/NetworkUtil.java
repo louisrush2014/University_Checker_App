@@ -15,18 +15,22 @@ import java.util.Scanner;
 
 public class NetworkUtil {
     private static final String URL_STRING = "https://api.data.gov/ed/collegescorecard/v1/schools.json";
+    private static final String API_KEY = "hTK1R7XCPBR6ZWZDopwkPOhL2NofhyFduTww5dpJ";
+    private static final String API_PARAM = "api_key";
     private static final String TAG = NetworkUtil.class.getSimpleName();
     private static final String DEGREES_AWARDED = "school.degrees_awarded.predominant";
-    private static String degreeAwardedValue = "1";
+    private static String degreeAwardedValue = "2";
     private static String FIELDS = "_fields";
     private static String ID = "id";
     private static String SCHOOL_NAME = "school.name";
-    private static String SCHOOL_YEAR_SIZE = "2017.student.size"; //default to now
-    private static String FIELDS_VALUE;
+    private static String SCHOOL_YEAR_SIZE = "2013.student.size"; //default to now
+    private static String FIELDS_VALUE = SCHOOL_NAME + ","+SCHOOL_YEAR_SIZE;
     public static URL buildUrl(){
         Uri uri = Uri.parse(URL_STRING).buildUpon()
+
                 .appendQueryParameter(DEGREES_AWARDED,degreeAwardedValue)
                 .appendQueryParameter(FIELDS,FIELDS_VALUE)
+                .appendQueryParameter(API_PARAM,API_KEY)
                 .build();
         URL url = null;
         try{
@@ -39,21 +43,11 @@ public class NetworkUtil {
     public static String getSchoolYearSize(){
         return SCHOOL_YEAR_SIZE;
     }
-public static void setDegreeAwardedValue(String s){
-        degreeAwardedValue = s;
-}
-    public static void setFieldsValue(boolean id, boolean name, boolean size ){
-        String temp = "";
-        if(id)
-            temp += id;
-        if(name)
-            temp+= ","+name;
-        if(size)
-            temp+=","+size;
-        FIELDS_VALUE = temp;
-    }
+
+
 public static String URLResponse(URL url) throws IOException{
     HttpURLConnection connect = (HttpURLConnection) url.openConnection();
+    System.out.println(url.toString());
     try{
         InputStream in = connect.getInputStream();
         Scanner scan = new Scanner(in);

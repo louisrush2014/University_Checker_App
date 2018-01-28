@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,12 +20,14 @@ import java.net.URL;
 public class ListActivity extends ListFragment {
     private ListView view;
     private ProgressBar pb;
+    private TextView textView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
        View v = inflater.inflate(R.layout.list_frag, container, false);
-        view = (ListView)view.findViewById(R.id.android_list);
-        pb = (ProgressBar) view.findViewById(R.id.progressBar);
+        view = (ListView)v.findViewById(android.R.id.list);
+        pb = (ProgressBar) v.findViewById(R.id.progressBar);
+        textView = (TextView) v.findViewById(R.id.android_text_view);
        return v;
     }
 
@@ -32,7 +35,6 @@ public class ListActivity extends ListFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.setVisibility(View.VISIBLE);
-        NetworkUtil.setFieldsValue(true,true,true);
         String schoolSize = NetworkUtil.getSchoolYearSize();
 
         new SynchTask().execute(schoolSize);
@@ -70,6 +72,15 @@ public class ListActivity extends ListFragment {
         protected void onPostExecute(String[] strings) {
             super.onPostExecute(strings);
             pb.setVisibility(View.INVISIBLE);
+            textView.setVisibility(View.VISIBLE);
+            if (strings == null) {
+                textView.setText("String is empty");
+            } else{
+                for (String data : strings) {
+                  //  textView.append((data) + "\n\n\n");
+                    System.out.println("Data: " + data);
+                }
+        }
         }
     }
 
